@@ -1,0 +1,9 @@
+ALLOWED_HOSTS="0.0.0.0,localhost"
+YOUTUBE_API_KEY=AIzaSyCuH1_RGpB17mFeUFwdyvYYBz_bjOpsXj4
+DEBUG=True
+CHANNEL_ID=UC29ju8bIPH5as8OGnQzwJyA
+DATABASE_URL=postgres://ginger:ginger@db:5432/timetracker
+CORS_ORIGIN_ALLOW_ALL=True
+IPYTHONDIR=/app/.ipython
+CELERY_TASK_ALWAYS_EAGER=False
+REDIS_URL=redis://redis:6379

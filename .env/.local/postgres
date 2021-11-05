@@ -1,0 +1,4 @@
+POSTGRES_USER=ginger
+POSTGRES_PASSWORD=ginger
+POSTGRES_DB=timetracker
+PGDATA=/var/lib/postgresql/data/pgdata
