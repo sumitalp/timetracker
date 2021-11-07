@@ -35,7 +35,7 @@ class User(AbstractUser):
                 token.blacklist()
 
     def my_teams(self):
-        return self.teams.all(status=TeamStatus.ACTIVE)
+        return self.teams.filter(status=TeamStatus.ACTIVE)
 
 
     def my_own_projects(self):

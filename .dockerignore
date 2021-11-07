@@ -9,5 +9,4 @@ __pycache__
 **/*.pyc
 dockerfiles
 web
-web2
 */node_modules

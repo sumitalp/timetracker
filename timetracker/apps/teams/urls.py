@@ -1,6 +1,7 @@
 from django.urls import path
 
 from timetracker.apps.teams.views import (
+    TeamDashboardAPIView,
     TeamListCreateAPIView,
     TeamRetrieveUpdateAPIView,
     InvitationAcceptAPIView,
@@ -23,5 +24,10 @@ urlpatterns = [
         "<int:pk>/invitation-accept/",
         InvitationAcceptAPIView.as_view(),
         name="accept_invitation",
+    ),
+    path(
+        "<int:team_id>/dashboard/",
+        TeamDashboardAPIView.as_view(),
+        name="team_dashboard",
     ),
 ]

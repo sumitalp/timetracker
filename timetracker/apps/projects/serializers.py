@@ -100,3 +100,8 @@ class EntrySerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class ProjectMinuteSerializer(serializers.Serializer):
+    project = ProjectSerializer()
+    total_minutes = serializers.DecimalField(decimal_places=2, max_digits=8)

@@ -1,9 +1,14 @@
 import random
+from datetime import datetime, timedelta
+
+from django.db.models import Q, Sum
 
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveUpdateAPIView, get_object_or_404
+from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from timetracker.apps.projects.models import Entry
+from timetracker.apps.projects.serializers import ProjectMinuteSerializer
 from timetracker.apps.teams.configs import InviteStatus
 from timetracker.apps.teams.models import Invitation, Team
 from timetracker.apps.teams.serializers import AcceptInvitationSerializer, TeamInvitationSerializer, TeamSerializer
@@ -73,4 +78,44 @@ class InvitationAcceptAPIView(CreateAPIView):
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class TeamDashboardAPIView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Entry.objects.all()
+
+    def get(self, request, team_id, format=None):
+        '''
+        ---
+        GET params: **num_days: int**
+        '''
+        team = request.user.my_teams().get(pk=team_id)
+        all_projects = team.projects.all()
+        members = team.members.all()
+
+        num_days = int(request.GET.get('num_days', 0))
+        now = datetime.now()
+        query_obj = Q(project__team=team, created_at__lt=now, is_tracked=True)
+        if num_days:
+            
+            date_user = now - timedelta(days=num_days)
+            query_obj &= Q(created_at__gte=date_user)
+
+        date_entries = self.get_queryset().filter(
+            query_obj
+        ).iterator(chunk_size=200)
+
+        project_entries = dict()
+        for entry in date_entries:
+            if entry.project.id not in project_entries:
+                project_entries[entry.project.id] = {
+                    "project": entry.project,
+                    "total_minutes": entry.minutes
+                }
+            else:
+                project_entries[entry.project.id]["total_minutes"] += entry.minutes
+
+        serializer = ProjectMinuteSerializer(project_entries.values(), many=True)
+
+        return Response(serializer.data)
 
