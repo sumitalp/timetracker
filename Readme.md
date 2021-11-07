@@ -1,4 +1,4 @@
-Sixads Assignment
+Assignment
 ====================
 
 ## Author
