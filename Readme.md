@@ -12,11 +12,6 @@ You need to create a simple application which:
 2. Each user can create team as well as create multiple projects.
 3. Invite others to join their teams.
 
-
-### Bonus points for:
-- pseudo algorithm for fetching as many youtube channels as possible. 
-- unit tests
-
 ## Requirements
 - Python 3.9
 - PostgreSQL
